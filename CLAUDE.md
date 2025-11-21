@@ -243,12 +243,13 @@ X-RateLimit-Reset: <seconds until reset>
 ### Critical Considerations
 1. **Store PAT securely** - Use environment variable or config file
 2. **Handle 24-hour PAT expiration** - Warn users or implement OAuth
-3. **Implement rate limit tracking** - Use response headers
-4. **Validate capability support** - Before sending commands
-5. **Include requestId in error logs** - For troubleshooting
-6. **Respect device event limits** - Max 1/minute
-7. **Use component "main"** - For most device commands
-8. **Maximum 10 commands per batch** - Per request limit
+3. **Use httpx for HTTP client** - Modern async-capable HTTP library (preferred over requests)
+4. **Implement rate limit tracking** - Use response headers
+5. **Validate capability support** - Before sending commands
+6. **Include requestId in error logs** - For troubleshooting
+7. **Respect device event limits** - Max 1/minute
+8. **Use component "main"** - For most device commands
+9. **Maximum 10 commands per batch** - Per request limit
 
 ### Recommended Project Structure
 ```
