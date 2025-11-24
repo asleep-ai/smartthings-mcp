@@ -46,7 +46,9 @@ class OAuthCallbackHandler(BaseHTTPRequestHandler):
             # Validate CSRF state parameter
             received_state = query_params.get("state", [None])[0]
             if received_state != OAuthCallbackHandler.expected_state:
-                OAuthCallbackHandler.error_message = "Invalid state parameter - possible CSRF attack"
+                OAuthCallbackHandler.error_message = (
+                    "Invalid state parameter - possible CSRF attack"
+                )
                 self._send_error_response("Security validation failed")
                 OAuthCallbackHandler.received_callback.set()
                 return
@@ -265,7 +267,7 @@ def exchange_code_for_tokens(config: OAuthConfig, auth_code: str) -> TokenData:
                 # Limit description length for security
                 desc = error_json["error_description"][:100]
                 error_msg = f"{error_msg} - {desc}"
-        except:
+        except Exception:
             # Don't expose raw response text
             pass
         raise Exception(error_msg)
@@ -335,9 +337,11 @@ def run_oauth_flow(config: OAuthConfig) -> TokenData:
 
     def run_server():
         server_started.set()
-        auth_code, error = start_callback_server(port=port, expected_state=state, timeout=300)
-        auth_result['code'] = auth_code
-        auth_result['error'] = error
+        auth_code, error = start_callback_server(
+            port=port, expected_state=state, timeout=300
+        )
+        auth_result["code"] = auth_code
+        auth_result["error"] = error
 
     server_thread = threading.Thread(target=run_server, daemon=True)
     server_thread.start()
@@ -354,8 +358,8 @@ def run_oauth_flow(config: OAuthConfig) -> TokenData:
     # Wait for callback to complete
     server_thread.join(timeout=310)
 
-    auth_code = auth_result.get('code')
-    error = auth_result.get('error')
+    auth_code = auth_result.get("code")
+    error = auth_result.get("error")
 
     if error:
         raise Exception(f"Authorization failed: {error}")
