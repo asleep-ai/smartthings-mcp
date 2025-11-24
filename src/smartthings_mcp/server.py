@@ -11,6 +11,7 @@ from mcp.server.stdio import stdio_server
 from mcp.types import TextContent, Tool
 
 from .client import SmartThingsClient
+from .oauth import OAuthConfig, TokenManager
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
@@ -80,24 +81,77 @@ class SmartThingsMCPServer:
 
             # Initialize client if not already done
             if self.client is None:
-                api_token = os.environ.get("SMARTTHINGS_TOKEN")
-                if not api_token:
-                    return [
-                        TextContent(
-                            type="text",
-                            text="Error: SMARTTHINGS_TOKEN environment variable is not set. Please set it with your SmartThings Personal Access Token.",
-                        )
-                    ]
+                # Try OAuth authentication first
+                client_id = os.environ.get("SMARTTHINGS_CLIENT_ID")
+                client_secret = os.environ.get("SMARTTHINGS_CLIENT_SECRET")
 
-                try:
-                    self.client = SmartThingsClient(api_token)
-                except Exception as e:
-                    return [
-                        TextContent(
-                            type="text",
-                            text=f"Error initializing SmartThings client: {str(e)}",
+                if client_id and client_secret:
+                    # OAuth configuration available
+                    try:
+                        # Create OAuth config with optional environment overrides
+                        redirect_uri = os.environ.get(
+                            "SMARTTHINGS_REDIRECT_URI", "http://localhost:8080/callback"
                         )
-                    ]
+                        token_file_path = os.environ.get(
+                            "SMARTTHINGS_TOKEN_FILE",
+                            "~/.config/smartthings-mcp/tokens.json",
+                        )
+
+                        oauth_config = OAuthConfig(
+                            client_id=client_id,
+                            client_secret=client_secret,
+                            redirect_uri=redirect_uri,
+                            token_file_path=token_file_path,
+                        )
+
+                        # Initialize token manager
+                        token_manager = TokenManager(oauth_config)
+
+                        # Check if tokens exist (not if they're valid - TokenManager will auto-refresh if expired)
+                        if not token_manager.load_tokens():
+                            return [
+                                TextContent(
+                                    type="text",
+                                    text="OAuth tokens not found. Run 'python -m smartthings_mcp.oauth_setup' to authenticate.",
+                                )
+                            ]
+
+                        # Initialize client with OAuth
+                        self.client = SmartThingsClient(token_manager=token_manager)
+                        logger.info(
+                            "Initialized SmartThings client with OAuth authentication"
+                        )
+
+                    except Exception as e:
+                        return [
+                            TextContent(
+                                type="text",
+                                text=f"Error initializing OAuth client: {str(e)}",
+                            )
+                        ]
+                else:
+                    # Fall back to PAT authentication
+                    api_token = os.environ.get("SMARTTHINGS_TOKEN")
+                    if not api_token:
+                        return [
+                            TextContent(
+                                type="text",
+                                text="No authentication configured. Either set SMARTTHINGS_CLIENT_ID + SMARTTHINGS_CLIENT_SECRET for OAuth, or SMARTTHINGS_TOKEN for PAT.",
+                            )
+                        ]
+
+                    try:
+                        self.client = SmartThingsClient(api_token=api_token)
+                        logger.info(
+                            "Initialized SmartThings client with PAT authentication"
+                        )
+                    except Exception as e:
+                        return [
+                            TextContent(
+                                type="text",
+                                text=f"Error initializing SmartThings client: {str(e)}",
+                            )
+                        ]
 
             try:
                 if name == "list_devices":
@@ -277,11 +331,21 @@ class SmartThingsMCPServer:
 
 def main():
     """Main entry point for the SmartThings MCP server."""
-    # Check for API token
-    if not os.environ.get("SMARTTHINGS_TOKEN"):
+    # Check for authentication configuration
+    client_id = os.environ.get("SMARTTHINGS_CLIENT_ID")
+    client_secret = os.environ.get("SMARTTHINGS_CLIENT_SECRET")
+    api_token = os.environ.get("SMARTTHINGS_TOKEN")
+
+    if client_id and client_secret:
+        logger.info("OAuth authentication configured. Will use OAuth for API access.")
+    elif api_token:
+        logger.info(
+            "PAT authentication configured. Will use Personal Access Token for API access."
+        )
+    else:
         logger.warning(
-            "SMARTTHINGS_TOKEN environment variable is not set. "
-            "You will need to set it before using any tools."
+            "No authentication configured. Either set SMARTTHINGS_CLIENT_ID + SMARTTHINGS_CLIENT_SECRET "
+            "for OAuth (preferred), or SMARTTHINGS_TOKEN for PAT authentication."
         )
 
     # Create and run server

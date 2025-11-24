@@ -1,7 +1,19 @@
 """SmartThings MCP Server package."""
 
-from .server import SmartThingsMCPServer, main
+import os
+
+# Load .env file if it exists
+try:
+    from dotenv import load_dotenv
+
+    # Searches current directory and parent directories automatically
+    load_dotenv()
+except ImportError:
+    # python-dotenv not installed, skip
+    pass
+
 from .client import SmartThingsClient
+from .server import SmartThingsMCPServer, main
 
 __version__ = "0.1.0"
 __all__ = ["SmartThingsMCPServer", "SmartThingsClient", "main"]

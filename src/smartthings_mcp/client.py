@@ -3,27 +3,55 @@ Minimal SmartThings API client for MCP integration
 """
 
 import httpx
-from typing import Dict, Any, List, Optional
+from typing import Dict, Any, List, Optional, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from .oauth import TokenManager
 
 
 class SmartThingsClient:
-    """Minimal SmartThings API client with PAT authentication"""
+    """SmartThings API client with support for both PAT and OAuth authentication"""
 
-    def __init__(self, api_token: str):
+    def __init__(self, api_token: Optional[str] = None,
+                 token_manager: Optional['TokenManager'] = None):
         """
-        Initialize SmartThings client with Personal Access Token
+        Initialize SmartThings client with either PAT or OAuth authentication
 
         Args:
-            api_token: SmartThings Personal Access Token
+            api_token: SmartThings Personal Access Token (for PAT authentication)
+            token_manager: TokenManager instance (for OAuth authentication)
+
+        Raises:
+            ValueError: If neither api_token nor token_manager is provided
         """
+        if not api_token and not token_manager:
+            raise ValueError("Either api_token or token_manager must be provided")
+
         self.api_token = api_token
+        self.token_manager = token_manager
+        self.auth_mode = "pat" if api_token else "oauth"
         self.base_url = "https://api.smartthings.com/v1"
-        self.client = httpx.Client(headers=self._get_headers())
+        self.client = httpx.Client()  # Initialize without headers - will pass them per request
 
     def _get_headers(self) -> Dict[str, str]:
-        """Get headers with Bearer authentication"""
+        """
+        Get headers with Bearer authentication
+
+        Returns:
+            Headers dict with Authorization Bearer token
+
+        Note:
+            In OAuth mode, automatically refreshes token if needed
+        """
+        # Get the appropriate token based on auth mode
+        if self.auth_mode == "pat":
+            token = self.api_token
+        else:
+            # OAuth mode - get valid token (auto-refreshes if needed)
+            token = self.token_manager.get_valid_token()
+
         return {
-            "Authorization": f"Bearer {self.api_token}",
+            "Authorization": f"Bearer {token}",
             "Accept": "application/json",
             "Content-Type": "application/json"
         }
@@ -38,7 +66,10 @@ class SmartThingsClient:
         Raises:
             Exception: If API request fails
         """
-        response = self.client.get(f"{self.base_url}/devices")
+        response = self.client.get(
+            f"{self.base_url}/devices",
+            headers=self._get_headers()  # Pass fresh headers with current token
+        )
 
         if response.status_code == 200:
             return response.json().get("items", [])
@@ -58,7 +89,10 @@ class SmartThingsClient:
         Raises:
             Exception: If API request fails
         """
-        response = self.client.get(f"{self.base_url}/devices/{device_id}/status")
+        response = self.client.get(
+            f"{self.base_url}/devices/{device_id}/status",
+            headers=self._get_headers()  # Pass fresh headers with current token
+        )
 
         if response.status_code == 200:
             return response.json()
@@ -99,7 +133,8 @@ class SmartThingsClient:
 
         response = self.client.post(
             f"{self.base_url}/devices/{device_id}/commands",
-            json=payload
+            json=payload,
+            headers=self._get_headers()  # Pass fresh headers with current token
         )
 
         if response.status_code in [200, 202]:
