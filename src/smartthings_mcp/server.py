@@ -604,7 +604,7 @@ class SmartThingsMCPServer:
         """List all SmartThings devices with switch capability."""
         try:
             # Run synchronous code in executor
-            loop = asyncio.get_event_loop()
+            loop = asyncio.get_running_loop()
             devices = await loop.run_in_executor(None, self.client.get_devices)
 
             # Filter for devices with switch capability
@@ -691,7 +691,7 @@ class SmartThingsMCPServer:
 
     async def _turn_on(self, device_ids: List[str]) -> List[TextContent]:
         """Turn on SmartThings switches."""
-        loop = asyncio.get_event_loop()
+        loop = asyncio.get_running_loop()
 
         async def execute_single(device_id: str) -> Dict[str, str]:
             try:
@@ -718,7 +718,7 @@ class SmartThingsMCPServer:
 
     async def _turn_off(self, device_ids: List[str]) -> List[TextContent]:
         """Turn off SmartThings switches."""
-        loop = asyncio.get_event_loop()
+        loop = asyncio.get_running_loop()
 
         async def execute_single(device_id: str) -> Dict[str, str]:
             try:
@@ -747,7 +747,7 @@ class SmartThingsMCPServer:
         self, device_ids: List[str], temperature: float
     ) -> List[TextContent]:
         """Set cooling temperature for air conditioners."""
-        loop = asyncio.get_event_loop()
+        loop = asyncio.get_running_loop()
 
         async def execute_single(device_id: str) -> Dict[str, str]:
             try:
@@ -781,7 +781,7 @@ class SmartThingsMCPServer:
         self, device_ids: List[str], mode: str
     ) -> List[TextContent]:
         """Set the mode for air conditioners."""
-        loop = asyncio.get_event_loop()
+        loop = asyncio.get_running_loop()
 
         async def execute_single(device_id: str) -> Dict[str, str]:
             try:
@@ -813,7 +813,7 @@ class SmartThingsMCPServer:
 
     async def _get_device_status(self, device_ids: List[str]) -> List[TextContent]:
         """Get the current status of SmartThings devices."""
-        loop = asyncio.get_event_loop()
+        loop = asyncio.get_running_loop()
 
         async def execute_single(device_id: str) -> str:
             try:
@@ -861,7 +861,7 @@ class SmartThingsMCPServer:
         self, device_ids: List[str], mode: str
     ) -> List[TextContent]:
         """Set the humidifier mode on SmartThings devices."""
-        loop = asyncio.get_event_loop()
+        loop = asyncio.get_running_loop()
 
         async def execute_single(device_id: str) -> Dict[str, str]:
             try:
@@ -895,7 +895,7 @@ class SmartThingsMCPServer:
         self, device_ids: List[str], level: int
     ) -> List[TextContent]:
         """Set brightness level of SmartThings lights."""
-        loop = asyncio.get_event_loop()
+        loop = asyncio.get_running_loop()
 
         async def execute_single(device_id: str) -> Dict[str, str]:
             try:
@@ -929,7 +929,7 @@ class SmartThingsMCPServer:
         self, device_ids: List[str], temperature: int
     ) -> List[TextContent]:
         """Set color temperature of SmartThings lights."""
-        loop = asyncio.get_event_loop()
+        loop = asyncio.get_running_loop()
 
         async def execute_single(device_id: str) -> Dict[str, str]:
             try:
@@ -963,7 +963,7 @@ class SmartThingsMCPServer:
         self, device_ids: List[str], hue: int, saturation: int
     ) -> List[TextContent]:
         """Set color of SmartThings lights using hue and saturation."""
-        loop = asyncio.get_event_loop()
+        loop = asyncio.get_running_loop()
         color_map = {"hue": hue, "saturation": saturation}
 
         async def execute_single(device_id: str) -> Dict[str, str]:
@@ -1004,7 +1004,7 @@ class SmartThingsMCPServer:
         turn_off_after: bool = True,
     ) -> List[TextContent]:
         """Configure fade effect for sleep/wake lighting transitions."""
-        loop = asyncio.get_event_loop()
+        loop = asyncio.get_running_loop()
 
         fade_config = {
             "duration": duration,
@@ -1051,7 +1051,7 @@ class SmartThingsMCPServer:
         self, device_ids: List[str], mode: str
     ) -> List[TextContent]:
         """Set fan mode for air conditioners or air purifiers."""
-        loop = asyncio.get_event_loop()
+        loop = asyncio.get_running_loop()
 
         async def execute_single(device_id: str) -> Dict[str, str]:
             try:
