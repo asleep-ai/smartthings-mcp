@@ -17,6 +17,15 @@ from .oauth import OAuthConfig, TokenManager
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("smartthings-mcp")
 
+# Reusable schema for device_ids parameter
+DEVICE_IDS_SCHEMA = {
+    "type": "array",
+    "items": {"type": "string"},
+    "description": "List of SmartThings device IDs",
+    "minItems": 1,
+    "maxItems": 10,
+}
+
 
 class SmartThingsMCPServer:
     """MCP Server for SmartThings integration."""
@@ -49,13 +58,7 @@ class SmartThingsMCPServer:
                     inputSchema={
                         "type": "object",
                         "properties": {
-                            "device_ids": {
-                                "type": "array",
-                                "items": {"type": "string"},
-                                "description": "List of SmartThings device IDs",
-                                "minItems": 1,
-                                "maxItems": 10,
-                            }
+                            "device_ids": DEVICE_IDS_SCHEMA
                         },
                         "required": ["device_ids"],
                         "additionalProperties": False,
@@ -67,13 +70,7 @@ class SmartThingsMCPServer:
                     inputSchema={
                         "type": "object",
                         "properties": {
-                            "device_ids": {
-                                "type": "array",
-                                "items": {"type": "string"},
-                                "description": "List of SmartThings device IDs",
-                                "minItems": 1,
-                                "maxItems": 10,
-                            }
+                            "device_ids": DEVICE_IDS_SCHEMA
                         },
                         "required": ["device_ids"],
                         "additionalProperties": False,
@@ -85,13 +82,7 @@ class SmartThingsMCPServer:
                     inputSchema={
                         "type": "object",
                         "properties": {
-                            "device_ids": {
-                                "type": "array",
-                                "items": {"type": "string"},
-                                "description": "List of SmartThings device IDs",
-                                "minItems": 1,
-                                "maxItems": 10,
-                            },
+                            "device_ids": DEVICE_IDS_SCHEMA,
                             "temperature": {
                                 "type": "number",
                                 "description": "The cooling temperature setpoint",
@@ -107,13 +98,7 @@ class SmartThingsMCPServer:
                     inputSchema={
                         "type": "object",
                         "properties": {
-                            "device_ids": {
-                                "type": "array",
-                                "items": {"type": "string"},
-                                "description": "List of SmartThings device IDs",
-                                "minItems": 1,
-                                "maxItems": 10,
-                            },
+                            "device_ids": DEVICE_IDS_SCHEMA,
                             "mode": {
                                 "type": "string",
                                 "description": "The air conditioner mode (common modes: cool, heat, auto, dry, fan - varies by device)",
@@ -129,13 +114,7 @@ class SmartThingsMCPServer:
                     inputSchema={
                         "type": "object",
                         "properties": {
-                            "device_ids": {
-                                "type": "array",
-                                "items": {"type": "string"},
-                                "description": "List of SmartThings device IDs",
-                                "minItems": 1,
-                                "maxItems": 10,
-                            }
+                            "device_ids": DEVICE_IDS_SCHEMA
                         },
                         "required": ["device_ids"],
                         "additionalProperties": False,
@@ -147,13 +126,7 @@ class SmartThingsMCPServer:
                     inputSchema={
                         "type": "object",
                         "properties": {
-                            "device_ids": {
-                                "type": "array",
-                                "items": {"type": "string"},
-                                "description": "List of SmartThings device IDs",
-                                "minItems": 1,
-                                "maxItems": 10,
-                            },
+                            "device_ids": DEVICE_IDS_SCHEMA,
                             "mode": {
                                 "type": "string",
                                 "description": "The humidifier mode to set (common modes: auto, low, medium, high - varies by device)",
@@ -169,13 +142,7 @@ class SmartThingsMCPServer:
                     inputSchema={
                         "type": "object",
                         "properties": {
-                            "device_ids": {
-                                "type": "array",
-                                "items": {"type": "string"},
-                                "description": "List of SmartThings device IDs",
-                                "minItems": 1,
-                                "maxItems": 10,
-                            },
+                            "device_ids": DEVICE_IDS_SCHEMA,
                             "level": {
                                 "type": "integer",
                                 "description": "Brightness level (0-100%)",
@@ -193,13 +160,7 @@ class SmartThingsMCPServer:
                     inputSchema={
                         "type": "object",
                         "properties": {
-                            "device_ids": {
-                                "type": "array",
-                                "items": {"type": "string"},
-                                "description": "List of SmartThings device IDs",
-                                "minItems": 1,
-                                "maxItems": 10,
-                            },
+                            "device_ids": DEVICE_IDS_SCHEMA,
                             "temperature": {
                                 "type": "integer",
                                 "description": "Color temperature in Kelvin (typical range: 2000-6500K, varies by device)",
@@ -215,13 +176,7 @@ class SmartThingsMCPServer:
                     inputSchema={
                         "type": "object",
                         "properties": {
-                            "device_ids": {
-                                "type": "array",
-                                "items": {"type": "string"},
-                                "description": "List of SmartThings device IDs",
-                                "minItems": 1,
-                                "maxItems": 10,
-                            },
+                            "device_ids": DEVICE_IDS_SCHEMA,
                             "hue": {
                                 "type": "integer",
                                 "description": "Hue as percentage (0-100%, where 0=red, 33=green, 67=blue)",
@@ -245,13 +200,7 @@ class SmartThingsMCPServer:
                     inputSchema={
                         "type": "object",
                         "properties": {
-                            "device_ids": {
-                                "type": "array",
-                                "items": {"type": "string"},
-                                "description": "List of SmartThings device IDs",
-                                "minItems": 1,
-                                "maxItems": 10,
-                            },
+                            "device_ids": DEVICE_IDS_SCHEMA,
                             "duration": {
                                 "type": "integer",
                                 "description": "Fade duration in minutes",
@@ -289,13 +238,7 @@ class SmartThingsMCPServer:
                     inputSchema={
                         "type": "object",
                         "properties": {
-                            "device_ids": {
-                                "type": "array",
-                                "items": {"type": "string"},
-                                "description": "List of SmartThings device IDs",
-                                "minItems": 1,
-                                "maxItems": 10,
-                            },
+                            "device_ids": DEVICE_IDS_SCHEMA,
                             "mode": {
                                 "type": "string",
                                 "description": "Fan mode (common modes: auto, low, medium, high, smart, sleep, turbo - varies by device)",
@@ -385,220 +328,51 @@ class SmartThingsMCPServer:
                             )
                         ]
 
+            # Tool registry: maps tool name to (handler, required_params, optional_params_with_defaults)
+            tool_registry = {
+                "list_devices": (self._list_devices, [], {}),
+                "turn_on": (self._turn_on, ["device_ids"], {}),
+                "turn_off": (self._turn_off, ["device_ids"], {}),
+                "set_cooling_setpoint": (self._set_cooling_setpoint, ["device_ids", "temperature"], {}),
+                "set_air_conditioner_mode": (self._set_air_conditioner_mode, ["device_ids", "mode"], {}),
+                "get_device_status": (self._get_device_status, ["device_ids"], {}),
+                "set_humidifier_mode": (self._set_humidifier_mode, ["device_ids", "mode"], {}),
+                "set_switch_level": (self._set_switch_level, ["device_ids", "level"], {}),
+                "set_color_temperature": (self._set_color_temperature, ["device_ids", "temperature"], {}),
+                "set_color": (self._set_color, ["device_ids", "hue", "saturation"], {}),
+                "set_light_fade": (
+                    self._set_light_fade,
+                    ["device_ids", "duration", "start_level", "end_level"],
+                    {"color_temp": 2500, "turn_off_after": True},
+                ),
+                "set_fan_mode": (self._set_fan_mode, ["device_ids", "mode"], {}),
+            }
+
             try:
-                if name == "list_devices":
-                    return await self._list_devices()
-                elif name == "turn_on":
-                    device_ids = arguments.get("device_ids")
-                    if not device_ids:
-                        return [
-                            TextContent(
-                                type="text",
-                                text="Error: device_ids parameter is required",
-                            )
-                        ]
-                    return await self._turn_on(device_ids)
-                elif name == "turn_off":
-                    device_ids = arguments.get("device_ids")
-                    if not device_ids:
-                        return [
-                            TextContent(
-                                type="text",
-                                text="Error: device_ids parameter is required",
-                            )
-                        ]
-                    return await self._turn_off(device_ids)
-                elif name == "set_cooling_setpoint":
-                    device_ids = arguments.get("device_ids")
-                    temperature = arguments.get("temperature")
-                    if not device_ids:
-                        return [
-                            TextContent(
-                                type="text",
-                                text="Error: device_ids parameter is required",
-                            )
-                        ]
-                    if temperature is None:
-                        return [
-                            TextContent(
-                                type="text",
-                                text="Error: temperature parameter is required",
-                            )
-                        ]
-                    return await self._set_cooling_setpoint(device_ids, temperature)
-                elif name == "set_air_conditioner_mode":
-                    device_ids = arguments.get("device_ids")
-                    mode = arguments.get("mode")
-                    if not device_ids:
-                        return [
-                            TextContent(
-                                type="text",
-                                text="Error: device_ids parameter is required",
-                            )
-                        ]
-                    if not mode:
-                        return [
-                            TextContent(
-                                type="text",
-                                text="Error: mode parameter is required",
-                            )
-                        ]
-                    return await self._set_air_conditioner_mode(device_ids, mode)
-                elif name == "get_device_status":
-                    device_ids = arguments.get("device_ids")
-                    if not device_ids:
-                        return [
-                            TextContent(
-                                type="text",
-                                text="Error: device_ids parameter is required",
-                            )
-                        ]
-                    return await self._get_device_status(device_ids)
-                elif name == "set_humidifier_mode":
-                    device_ids = arguments.get("device_ids")
-                    mode = arguments.get("mode")
-                    if not device_ids:
-                        return [
-                            TextContent(
-                                type="text",
-                                text="Error: device_ids parameter is required",
-                            )
-                        ]
-                    if not mode:
-                        return [
-                            TextContent(
-                                type="text",
-                                text="Error: mode parameter is required",
-                            )
-                        ]
-                    return await self._set_humidifier_mode(device_ids, mode)
-                elif name == "set_switch_level":
-                    device_ids = arguments.get("device_ids")
-                    level = arguments.get("level")
-                    if not device_ids:
-                        return [
-                            TextContent(
-                                type="text",
-                                text="Error: device_ids parameter is required",
-                            )
-                        ]
-                    if level is None:
-                        return [
-                            TextContent(
-                                type="text",
-                                text="Error: level parameter is required",
-                            )
-                        ]
-                    return await self._set_switch_level(device_ids, level)
-                elif name == "set_color_temperature":
-                    device_ids = arguments.get("device_ids")
-                    temperature = arguments.get("temperature")
-                    if not device_ids:
-                        return [
-                            TextContent(
-                                type="text",
-                                text="Error: device_ids parameter is required",
-                            )
-                        ]
-                    if temperature is None:
-                        return [
-                            TextContent(
-                                type="text",
-                                text="Error: temperature parameter is required",
-                            )
-                        ]
-                    return await self._set_color_temperature(device_ids, temperature)
-                elif name == "set_color":
-                    device_ids = arguments.get("device_ids")
-                    hue = arguments.get("hue")
-                    saturation = arguments.get("saturation")
-                    if not device_ids:
-                        return [
-                            TextContent(
-                                type="text",
-                                text="Error: device_ids parameter is required",
-                            )
-                        ]
-                    if hue is None:
-                        return [
-                            TextContent(
-                                type="text",
-                                text="Error: hue parameter is required",
-                            )
-                        ]
-                    if saturation is None:
-                        return [
-                            TextContent(
-                                type="text",
-                                text="Error: saturation parameter is required",
-                            )
-                        ]
-                    return await self._set_color(device_ids, hue, saturation)
-                elif name == "set_light_fade":
-                    device_ids = arguments.get("device_ids")
-                    duration = arguments.get("duration")
-                    start_level = arguments.get("start_level")
-                    end_level = arguments.get("end_level")
-                    color_temp = arguments.get("color_temp", 2500)
-                    turn_off_after = arguments.get("turn_off_after", True)
-                    if not device_ids:
-                        return [
-                            TextContent(
-                                type="text",
-                                text="Error: device_ids parameter is required",
-                            )
-                        ]
-                    if duration is None:
-                        return [
-                            TextContent(
-                                type="text",
-                                text="Error: duration parameter is required",
-                            )
-                        ]
-                    if start_level is None:
-                        return [
-                            TextContent(
-                                type="text",
-                                text="Error: start_level parameter is required",
-                            )
-                        ]
-                    if end_level is None:
-                        return [
-                            TextContent(
-                                type="text",
-                                text="Error: end_level parameter is required",
-                            )
-                        ]
-                    return await self._set_light_fade(
-                        device_ids, duration, start_level, end_level, color_temp, turn_off_after
-                    )
-                elif name == "set_fan_mode":
-                    device_ids = arguments.get("device_ids")
-                    mode = arguments.get("mode")
-                    if not device_ids:
-                        return [
-                            TextContent(
-                                type="text",
-                                text="Error: device_ids parameter is required",
-                            )
-                        ]
-                    if not mode:
-                        return [
-                            TextContent(
-                                type="text",
-                                text="Error: mode parameter is required",
-                            )
-                        ]
-                    return await self._set_fan_mode(device_ids, mode)
-                else:
-                    return [
-                        TextContent(type="text", text=f"Error: Unknown tool '{name}'")
-                    ]
+                if name not in tool_registry:
+                    return [TextContent(type="text", text=f"Error: Unknown tool '{name}'")]
+
+                handler, required_params, optional_params = tool_registry[name]
+
+                # Validate required parameters
+                handler_args = []
+                for param in required_params:
+                    value = arguments.get(param)
+                    if value is None and param != "device_ids":
+                        return [TextContent(type="text", text=f"Error: {param} parameter is required")]
+                    if param == "device_ids" and not value:
+                        return [TextContent(type="text", text="Error: device_ids parameter is required")]
+                    handler_args.append(value)
+
+                # Add optional parameters with defaults
+                for param, default in optional_params.items():
+                    handler_args.append(arguments.get(param, default))
+
+                return await handler(*handler_args)
+
             except Exception as e:
                 logger.error(f"Error executing tool {name}: {e}")
-                return [
-                    TextContent(type="text", text=f"Error executing {name}: {str(e)}")
-                ]
+                return [TextContent(type="text", text=f"Error executing {name}: {str(e)}")]
 
     async def _list_devices(self) -> List[TextContent]:
         """List all SmartThings devices with switch capability."""
@@ -689,127 +463,76 @@ class SmartThingsMCPServer:
             return f"Device does not support {capability_name}"
         return error_msg
 
-    async def _turn_on(self, device_ids: List[str]) -> List[TextContent]:
-        """Turn on SmartThings switches."""
+    async def _execute_batch(
+        self,
+        device_ids: List[str],
+        capability: str,
+        command: str,
+        args: List[Any] = None,
+        success_msg: str = "Success",
+    ) -> List[TextContent]:
+        """Execute a command on multiple devices in parallel."""
         loop = asyncio.get_running_loop()
 
         async def execute_single(device_id: str) -> Dict[str, str]:
             try:
+                cmd_args = args if args is not None else []
                 await loop.run_in_executor(
-                    None, self.client.execute_command, device_id, "switch", "on"
+                    None,
+                    self.client.execute_command,
+                    device_id,
+                    capability,
+                    command,
+                    cmd_args,
                 )
                 return {
                     "device_id": device_id,
                     "status": "success",
-                    "message": "Turned on",
+                    "message": success_msg,
                 }
             except Exception as e:
-                logger.error(f"Failed to turn on device {device_id}: {e}")
+                logger.error(f"Failed {command} on device {device_id}: {e}")
                 return {
                     "device_id": device_id,
                     "status": "failed",
-                    "message": self._parse_error_message(e, "switch capability"),
+                    "message": self._parse_error_message(e, capability),
                 }
 
         tasks = [execute_single(device_id) for device_id in device_ids]
         results = await asyncio.gather(*tasks)
-
         return [TextContent(type="text", text=self._format_batch_results(list(results)))]
+
+    async def _turn_on(self, device_ids: List[str]) -> List[TextContent]:
+        """Turn on SmartThings switches."""
+        return await self._execute_batch(device_ids, "switch", "on", success_msg="Turned on")
 
     async def _turn_off(self, device_ids: List[str]) -> List[TextContent]:
         """Turn off SmartThings switches."""
-        loop = asyncio.get_running_loop()
-
-        async def execute_single(device_id: str) -> Dict[str, str]:
-            try:
-                await loop.run_in_executor(
-                    None, self.client.execute_command, device_id, "switch", "off"
-                )
-                return {
-                    "device_id": device_id,
-                    "status": "success",
-                    "message": "Turned off",
-                }
-            except Exception as e:
-                logger.error(f"Failed to turn off device {device_id}: {e}")
-                return {
-                    "device_id": device_id,
-                    "status": "failed",
-                    "message": self._parse_error_message(e, "switch capability"),
-                }
-
-        tasks = [execute_single(device_id) for device_id in device_ids]
-        results = await asyncio.gather(*tasks)
-
-        return [TextContent(type="text", text=self._format_batch_results(list(results)))]
+        return await self._execute_batch(device_ids, "switch", "off", success_msg="Turned off")
 
     async def _set_cooling_setpoint(
         self, device_ids: List[str], temperature: float
     ) -> List[TextContent]:
         """Set cooling temperature for air conditioners."""
-        loop = asyncio.get_running_loop()
-
-        async def execute_single(device_id: str) -> Dict[str, str]:
-            try:
-                await loop.run_in_executor(
-                    None,
-                    self.client.execute_command,
-                    device_id,
-                    "thermostatCoolingSetpoint",
-                    "setCoolingSetpoint",
-                    [temperature],
-                )
-                return {
-                    "device_id": device_id,
-                    "status": "success",
-                    "message": f"Set cooling setpoint to {temperature}",
-                }
-            except Exception as e:
-                logger.error(f"Failed to set cooling setpoint on device {device_id}: {e}")
-                return {
-                    "device_id": device_id,
-                    "status": "failed",
-                    "message": self._parse_error_message(e, "thermostatCoolingSetpoint"),
-                }
-
-        tasks = [execute_single(device_id) for device_id in device_ids]
-        results = await asyncio.gather(*tasks)
-
-        return [TextContent(type="text", text=self._format_batch_results(list(results)))]
+        return await self._execute_batch(
+            device_ids,
+            "thermostatCoolingSetpoint",
+            "setCoolingSetpoint",
+            args=[temperature],
+            success_msg=f"Set cooling setpoint to {temperature}",
+        )
 
     async def _set_air_conditioner_mode(
         self, device_ids: List[str], mode: str
     ) -> List[TextContent]:
         """Set the mode for air conditioners."""
-        loop = asyncio.get_running_loop()
-
-        async def execute_single(device_id: str) -> Dict[str, str]:
-            try:
-                await loop.run_in_executor(
-                    None,
-                    self.client.execute_command,
-                    device_id,
-                    "airConditionerMode",
-                    "setAirConditionerMode",
-                    [mode],
-                )
-                return {
-                    "device_id": device_id,
-                    "status": "success",
-                    "message": f"Set mode to '{mode}'",
-                }
-            except Exception as e:
-                logger.error(f"Failed to set AC mode on device {device_id}: {e}")
-                return {
-                    "device_id": device_id,
-                    "status": "failed",
-                    "message": self._parse_error_message(e, "airConditionerMode"),
-                }
-
-        tasks = [execute_single(device_id) for device_id in device_ids]
-        results = await asyncio.gather(*tasks)
-
-        return [TextContent(type="text", text=self._format_batch_results(list(results)))]
+        return await self._execute_batch(
+            device_ids,
+            "airConditionerMode",
+            "setAirConditionerMode",
+            args=[mode],
+            success_msg=f"Set mode to '{mode}'",
+        )
 
     async def _get_device_status(self, device_ids: List[str]) -> List[TextContent]:
         """Get the current status of SmartThings devices."""
@@ -861,138 +584,50 @@ class SmartThingsMCPServer:
         self, device_ids: List[str], mode: str
     ) -> List[TextContent]:
         """Set the humidifier mode on SmartThings devices."""
-        loop = asyncio.get_running_loop()
-
-        async def execute_single(device_id: str) -> Dict[str, str]:
-            try:
-                await loop.run_in_executor(
-                    None,
-                    self.client.execute_command,
-                    device_id,
-                    "humidifierMode",
-                    "setHumidifierMode",
-                    [mode],
-                )
-                return {
-                    "device_id": device_id,
-                    "status": "success",
-                    "message": f"Set humidifier mode to '{mode}'",
-                }
-            except Exception as e:
-                logger.error(f"Failed to set humidifier mode on device {device_id}: {e}")
-                return {
-                    "device_id": device_id,
-                    "status": "failed",
-                    "message": self._parse_error_message(e, "humidifierMode"),
-                }
-
-        tasks = [execute_single(device_id) for device_id in device_ids]
-        results = await asyncio.gather(*tasks)
-
-        return [TextContent(type="text", text=self._format_batch_results(list(results)))]
+        return await self._execute_batch(
+            device_ids,
+            "humidifierMode",
+            "setHumidifierMode",
+            args=[mode],
+            success_msg=f"Set humidifier mode to '{mode}'",
+        )
 
     async def _set_switch_level(
         self, device_ids: List[str], level: int
     ) -> List[TextContent]:
         """Set brightness level of SmartThings lights."""
-        loop = asyncio.get_running_loop()
-
-        async def execute_single(device_id: str) -> Dict[str, str]:
-            try:
-                await loop.run_in_executor(
-                    None,
-                    self.client.execute_command,
-                    device_id,
-                    "switchLevel",
-                    "setLevel",
-                    [level],
-                )
-                return {
-                    "device_id": device_id,
-                    "status": "success",
-                    "message": f"Set brightness to {level}%",
-                }
-            except Exception as e:
-                logger.error(f"Failed to set switch level on device {device_id}: {e}")
-                return {
-                    "device_id": device_id,
-                    "status": "failed",
-                    "message": self._parse_error_message(e, "switchLevel"),
-                }
-
-        tasks = [execute_single(device_id) for device_id in device_ids]
-        results = await asyncio.gather(*tasks)
-
-        return [TextContent(type="text", text=self._format_batch_results(list(results)))]
+        return await self._execute_batch(
+            device_ids,
+            "switchLevel",
+            "setLevel",
+            args=[level],
+            success_msg=f"Set brightness to {level}%",
+        )
 
     async def _set_color_temperature(
         self, device_ids: List[str], temperature: int
     ) -> List[TextContent]:
         """Set color temperature of SmartThings lights."""
-        loop = asyncio.get_running_loop()
-
-        async def execute_single(device_id: str) -> Dict[str, str]:
-            try:
-                await loop.run_in_executor(
-                    None,
-                    self.client.execute_command,
-                    device_id,
-                    "colorTemperature",
-                    "setColorTemperature",
-                    [temperature],
-                )
-                return {
-                    "device_id": device_id,
-                    "status": "success",
-                    "message": f"Set color temperature to {temperature}K",
-                }
-            except Exception as e:
-                logger.error(f"Failed to set color temperature on device {device_id}: {e}")
-                return {
-                    "device_id": device_id,
-                    "status": "failed",
-                    "message": self._parse_error_message(e, "colorTemperature"),
-                }
-
-        tasks = [execute_single(device_id) for device_id in device_ids]
-        results = await asyncio.gather(*tasks)
-
-        return [TextContent(type="text", text=self._format_batch_results(list(results)))]
+        return await self._execute_batch(
+            device_ids,
+            "colorTemperature",
+            "setColorTemperature",
+            args=[temperature],
+            success_msg=f"Set color temperature to {temperature}K",
+        )
 
     async def _set_color(
         self, device_ids: List[str], hue: int, saturation: int
     ) -> List[TextContent]:
         """Set color of SmartThings lights using hue and saturation."""
-        loop = asyncio.get_running_loop()
         color_map = {"hue": hue, "saturation": saturation}
-
-        async def execute_single(device_id: str) -> Dict[str, str]:
-            try:
-                await loop.run_in_executor(
-                    None,
-                    self.client.execute_command,
-                    device_id,
-                    "colorControl",
-                    "setColor",
-                    [color_map],
-                )
-                return {
-                    "device_id": device_id,
-                    "status": "success",
-                    "message": f"Set color to hue={hue}%, saturation={saturation}%",
-                }
-            except Exception as e:
-                logger.error(f"Failed to set color on device {device_id}: {e}")
-                return {
-                    "device_id": device_id,
-                    "status": "failed",
-                    "message": self._parse_error_message(e, "colorControl"),
-                }
-
-        tasks = [execute_single(device_id) for device_id in device_ids]
-        results = await asyncio.gather(*tasks)
-
-        return [TextContent(type="text", text=self._format_batch_results(list(results)))]
+        return await self._execute_batch(
+            device_ids,
+            "colorControl",
+            "setColor",
+            args=[color_map],
+            success_msg=f"Set color to hue={hue}%, saturation={saturation}%",
+        )
 
     async def _set_light_fade(
         self,
@@ -1004,8 +639,6 @@ class SmartThingsMCPServer:
         turn_off_after: bool = True,
     ) -> List[TextContent]:
         """Configure fade effect for sleep/wake lighting transitions."""
-        loop = asyncio.get_running_loop()
-
         fade_config = {
             "duration": duration,
             "effects": [
@@ -1018,68 +651,25 @@ class SmartThingsMCPServer:
             },
         }
         fade_type = "wind down" if end_level < start_level else "wake up"
-
-        async def execute_single(device_id: str) -> Dict[str, str]:
-            try:
-                await loop.run_in_executor(
-                    None,
-                    self.client.execute_command,
-                    device_id,
-                    "synthetic.lightingEffectFade",
-                    "setFade",
-                    [fade_config],
-                )
-                return {
-                    "device_id": device_id,
-                    "status": "success",
-                    "message": f"Configured {fade_type} fade: {start_level}% -> {end_level}% over {duration}min",
-                }
-            except Exception as e:
-                logger.error(f"Failed to set light fade on device {device_id}: {e}")
-                return {
-                    "device_id": device_id,
-                    "status": "failed",
-                    "message": self._parse_error_message(e, "lightingEffectFade"),
-                }
-
-        tasks = [execute_single(device_id) for device_id in device_ids]
-        results = await asyncio.gather(*tasks)
-
-        return [TextContent(type="text", text=self._format_batch_results(list(results)))]
+        return await self._execute_batch(
+            device_ids,
+            "synthetic.lightingEffectFade",
+            "setFade",
+            args=[fade_config],
+            success_msg=f"Configured {fade_type} fade: {start_level}% -> {end_level}% over {duration}min",
+        )
 
     async def _set_fan_mode(
         self, device_ids: List[str], mode: str
     ) -> List[TextContent]:
         """Set fan mode for air conditioners or air purifiers."""
-        loop = asyncio.get_running_loop()
-
-        async def execute_single(device_id: str) -> Dict[str, str]:
-            try:
-                await loop.run_in_executor(
-                    None,
-                    self.client.execute_command,
-                    device_id,
-                    "airConditionerFanMode",
-                    "setFanMode",
-                    [mode],
-                )
-                return {
-                    "device_id": device_id,
-                    "status": "success",
-                    "message": f"Set fan mode to '{mode}'",
-                }
-            except Exception as e:
-                logger.error(f"Failed to set fan mode on device {device_id}: {e}")
-                return {
-                    "device_id": device_id,
-                    "status": "failed",
-                    "message": self._parse_error_message(e, "airConditionerFanMode"),
-                }
-
-        tasks = [execute_single(device_id) for device_id in device_ids]
-        results = await asyncio.gather(*tasks)
-
-        return [TextContent(type="text", text=self._format_batch_results(list(results)))]
+        return await self._execute_batch(
+            device_ids,
+            "airConditionerFanMode",
+            "setFanMode",
+            args=[mode],
+            success_msg=f"Set fan mode to '{mode}'",
+        )
 
     async def run(self):
         """Run the MCP server."""
