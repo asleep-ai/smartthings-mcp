@@ -186,6 +186,33 @@ class SmartThingsMCPServer:
                     },
                 ),
                 Tool(
+                    name="set_color",
+                    description="Set color of a SmartThings light using hue and saturation (0-100% each)",
+                    inputSchema={
+                        "type": "object",
+                        "properties": {
+                            "device_id": {
+                                "type": "string",
+                                "description": "The SmartThings device ID",
+                            },
+                            "hue": {
+                                "type": "integer",
+                                "description": "Hue as percentage (0-100%, where 0=red, 33=green, 67=blue)",
+                                "minimum": 0,
+                                "maximum": 100,
+                            },
+                            "saturation": {
+                                "type": "integer",
+                                "description": "Saturation as percentage (0-100%, where 0=white, 100=full color)",
+                                "minimum": 0,
+                                "maximum": 100,
+                            },
+                        },
+                        "required": ["device_id", "hue", "saturation"],
+                        "additionalProperties": False,
+                    },
+                ),
+                Tool(
                     name="set_light_fade",
                     description="Configure fade effect for sleep/wake lighting transitions",
                     inputSchema={
@@ -448,6 +475,32 @@ class SmartThingsMCPServer:
                             )
                         ]
                     return await self._set_color_temperature(device_id, temperature)
+                elif name == "set_color":
+                    device_id = arguments.get("device_id")
+                    hue = arguments.get("hue")
+                    saturation = arguments.get("saturation")
+                    if not device_id:
+                        return [
+                            TextContent(
+                                type="text",
+                                text="Error: device_id parameter is required",
+                            )
+                        ]
+                    if hue is None:
+                        return [
+                            TextContent(
+                                type="text",
+                                text="Error: hue parameter is required",
+                            )
+                        ]
+                    if saturation is None:
+                        return [
+                            TextContent(
+                                type="text",
+                                text="Error: saturation parameter is required",
+                            )
+                        ]
+                    return await self._set_color(device_id, hue, saturation)
                 elif name == "set_light_fade":
                     device_id = arguments.get("device_id")
                     duration = arguments.get("duration")
@@ -857,6 +910,44 @@ class SmartThingsMCPServer:
                 error_msg = f"Device {device_id} not found. Please check the device ID."
             elif "422" in str(e) or "Invalid command" in str(e):
                 error_msg = f"Device {device_id} does not support the colorTemperature capability."
+
+            return [TextContent(type="text", text=error_msg)]
+
+    async def _set_color(
+        self, device_id: str, hue: int, saturation: int
+    ) -> List[TextContent]:
+        """Set color of a SmartThings light using hue and saturation."""
+        try:
+            # Build the color map - SmartThings uses 0-100 percent scale
+            color_map = {"hue": hue, "saturation": saturation}
+
+            # Run synchronous code in executor
+            loop = asyncio.get_event_loop()
+            result = await loop.run_in_executor(
+                None,
+                self.client.execute_command,
+                device_id,
+                "colorControl",
+                "setColor",
+                [color_map],
+            )
+
+            return [
+                TextContent(
+                    type="text",
+                    text=f"Successfully set color to hue={hue}%, saturation={saturation}% on device {device_id}",
+                )
+            ]
+
+        except Exception as e:
+            error_msg = f"Failed to set color on device {device_id}: {str(e)}"
+            logger.error(error_msg)
+
+            # Provide helpful error messages
+            if "404" in str(e) or "not found" in str(e).lower():
+                error_msg = f"Device {device_id} not found. Please check the device ID."
+            elif "422" in str(e) or "Invalid command" in str(e):
+                error_msg = f"Device {device_id} does not support the colorControl capability."
 
             return [TextContent(type="text", text=error_msg)]
 
