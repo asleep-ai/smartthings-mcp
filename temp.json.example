@@ -1,0 +1,12 @@
+{
+    "clientName": "your-app-name",
+    "scope": [
+        "r:devices:*",
+        "x:devices:*",
+        "r:locations:*",
+        "w:locations:*"
+    ],
+    "redirectUris": [
+        "http://localhost:8080/callback"
+    ]
+}

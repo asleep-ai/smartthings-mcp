@@ -213,3 +213,6 @@ temp/
 tokens.json
 *.tokens.json
 oauth_tokens.json
+
+# OAuth configuration templates (user-specific)
+temp.json

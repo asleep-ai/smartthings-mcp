@@ -31,6 +31,7 @@ dependencies = [
 [project.scripts]
 smartthings-mcp = "smartthings_mcp.server:main"
 smartthings-oauth-setup = "smartthings_mcp.oauth_setup:main"
+smartthings-update-oauth = "cli.update_oauth:main"
 
 [project.optional-dependencies]
 dev = [
@@ -40,7 +41,7 @@ dev = [
 
 [tool.setuptools]
 package-dir = {"" = "src"}
-packages = ["smartthings_mcp"]
+packages = ["smartthings_mcp", "cli"]
 
 [tool.setuptools.package-data]
 smartthings_mcp = ["py.typed"]
