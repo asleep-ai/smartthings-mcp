@@ -13,7 +13,8 @@ except ImportError:
     pass
 
 from .client import SmartThingsClient
+from .oauth import OAuthConfig, TokenManager
 from .server import SmartThingsMCPServer, main
 
 __version__ = "0.1.0"
-__all__ = ["SmartThingsMCPServer", "SmartThingsClient", "main"]
+__all__ = ["SmartThingsMCPServer", "SmartThingsClient", "OAuthConfig", "TokenManager", "main"]
