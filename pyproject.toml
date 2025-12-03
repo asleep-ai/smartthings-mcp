@@ -32,8 +32,15 @@ dependencies = [
 smartthings-mcp = "smartthings_mcp.server:main"
 smartthings-oauth-setup = "smartthings_mcp.oauth_setup:main"
 smartthings-update-oauth = "cli.update_oauth:main"
+smartthings-agent = "smartthings_agent.__main__:main"
 
 [project.optional-dependencies]
+agent = [
+    "litellm>=1.0.0",
+    "claude-agent-sdk>=0.1.10",
+    "fastapi>=0.100.0",
+    "uvicorn>=0.20.0",
+]
 dev = [
     "pytest>=7.0.0",
     "ruff>=0.1.0",
@@ -41,7 +48,7 @@ dev = [
 
 [tool.setuptools]
 package-dir = {"" = "src"}
-packages = ["smartthings_mcp", "cli"]
+packages = ["smartthings_mcp", "smartthings_agent", "cli"]
 
 [tool.setuptools.package-data]
 smartthings_mcp = ["py.typed"]

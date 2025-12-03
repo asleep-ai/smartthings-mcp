@@ -216,3 +216,6 @@ oauth_tokens.json
 
 # OAuth configuration templates (user-specific)
 temp.json
+
+# LiteLLM configuration (contains local paths)
+litellm_config.yaml
